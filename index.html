@@ -57,8 +57,8 @@
   #board { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   #turtle {
     position: absolute;
-    width: 54px; height: 54px;
-    margin-left: -27px; margin-top: -27px;
+    width: 84px; height: 84px;
+    margin-left: -42px; margin-top: -42px;
     left: 0; top: 0;
     transition: none;
     pointer-events: none;
@@ -100,14 +100,32 @@
   }
   .toggle button.active { background: var(--accent); color: #fff; }
 
-  /* input area */
+  /* floating translucent command prompt */
+  #promptBar {
+    position: absolute;
+    left: 50%; bottom: 20px; transform: translateX(-50%);
+    width: min(660px, 92%);
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, .45);
+    border: 2px solid rgba(255, 255, 255, .75);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    z-index: 5;
+  }
+  #promptBar .prompt-tip { font-size: 1.3rem; flex: 0 0 auto; opacity: .85; user-select: none; }
   #cmdInput, #cmdArea {
-    width: 100%; border: 2px solid #ffd6c2; border-radius: 14px; padding: 12px;
-    font-family: "Courier New", monospace; font-size: 1.05rem; color: var(--ink); background: #fff;
+    flex: 1 1 auto; min-width: 0;
+    border: 0; border-radius: 12px; padding: 10px 12px;
+    font-family: "Courier New", monospace; font-size: 1.1rem; font-weight: bold;
+    color: var(--ink); background: rgba(255,255,255,.55);
     resize: vertical;
   }
-  #cmdInput:focus, #cmdArea:focus { outline: 3px solid var(--accent2); border-color: var(--accent2); }
-  #cmdArea { min-height: 130px; display: none; }
+  #cmdInput::placeholder, #cmdArea::placeholder { color: rgba(43,44,52,.45); font-weight: normal; }
+  #cmdInput:focus, #cmdArea:focus { outline: 3px solid var(--accent2); background: rgba(255,255,255,.85); }
+  #cmdArea { min-height: 110px; display: none; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn {
     border: 0; cursor: pointer; border-radius: 14px; padding: 10px 14px; font-weight: bold;
@@ -158,6 +176,14 @@
     <section id="stage">
       <canvas id="board"></canvas>
       <svg id="turtle" viewBox="0 0 100 100"></svg>
+
+      <!-- Floating translucent command prompt -->
+      <div id="promptBar">
+        <span class="prompt-tip">🐢▸</span>
+        <input id="cmdInput" placeholder="adelante 100  ·  escribe y pulsa Enter" autocomplete="off" spellcheck="false">
+        <textarea id="cmdArea" placeholder="repite 4 [ adelante 100 derecha 90 ]" spellcheck="false"></textarea>
+        <button class="btn blue" id="runBtn">▶</button>
+      </div>
     </section>
 
     <aside>
@@ -176,12 +202,9 @@
             <button data-mode="batch">Lote · Batch</button>
           </div>
           <p style="font-size:.78rem;margin:8px 2px;color:#777" id="modeHint">
-            Escribe una orden y presiona <b>Enter</b> · Type a command and press <b>Enter</b>
+            Escribe abajo y presiona <b>Enter</b> · Type below and press <b>Enter</b>
           </p>
-          <input id="cmdInput" placeholder="adelante 100" autocomplete="off" spellcheck="false">
-          <textarea id="cmdArea" placeholder="repite 4 [ adelante 100 derecha 90 ]" spellcheck="false"></textarea>
           <div class="row" style="margin-top:8px">
-            <button class="btn blue" id="runBtn">▶ Ejecutar · Run</button>
             <button class="btn" id="exampleBtn">🎲 Ejemplo · Example</button>
             <button class="btn ghost" id="clearBtn">🧹 Limpiar · Clear</button>
           </div>
@@ -217,10 +240,18 @@
               <tr><td>Oculta · hide</td><td><code>hideturtle</code> / <code>ht</code></td><td><code>oculta</code> / <code>ot</code></td></tr>
               <tr><td>Muestra · show</td><td><code>showturtle</code> / <code>st</code></td><td><code>muestra</code> / <code>mt</code></td></tr>
               <tr><td>Repite · loop</td><td><code>repeat 4 [ ... ]</code></td><td><code>repite 4 [ ... ]</code></td></tr>
+              <tr><th colspan="3">Figuras · Figures</th></tr>
+              <tr><td>Círculo · circle</td><td><code>circle 60</code></td><td><code>circulo 60</code></td></tr>
+              <tr><td>Cuadrado · square</td><td><code>square 80</code></td><td><code>cuadrado 80</code></td></tr>
+              <tr><td>Triángulo · triangle</td><td><code>triangle 90</code></td><td><code>triangulo 90</code></td></tr>
+              <tr><td>Rectángulo · rectangle</td><td><code>rectangle 120 60</code></td><td><code>rectangulo 120 60</code></td></tr>
+              <tr><td>Polígono · polygon</td><td><code>polygon 6 60</code></td><td><code>poligono 6 60</code></td></tr>
+              <tr><td>Estrella · star</td><td><code>star 120</code></td><td><code>estrella 120</code></td></tr>
             </table>
             <p style="font-size:.74rem;color:#888;margin-top:6px">
               Colores · Colors: red/rojo, blue/azul, green/verde, yellow/amarillo,
-              orange/naranja, purple/morado, pink/rosa, black/negro, brown/marron, white/blanco.
+              orange/naranja, purple/morado, pink/rosa, black/negro, brown/marron, white/blanco,
+              gray/gris, turquoise/turquesa, lime/lima.
             </p>
           </details>
         </div>
@@ -273,6 +304,21 @@ const TURTLES = [
       turtleSVG({shell:"#ffd6a5", shellDark:"#e8a06b", skin:"#fff1c1",
       extra:`<circle cx="44" cy="13" r="1.6" fill="#1c1c1c"/><circle cx="56" cy="13" r="1.6" fill="#1c1c1c"/>`})
     }</g>` },
+  { name: "Galáctica · Galaxy", build: () => turtleSVG({shell:"#3a0ca3", shellDark:"#1a0a4a", skin:"#7209b7",
+      extra:`<circle cx="42" cy="44" r="1.7" fill="#fff"/><circle cx="58" cy="49" r="1.4" fill="#fff"/>
+             <circle cx="50" cy="63" r="1.6" fill="#fff"/><circle cx="44" cy="58" r="1.1" fill="#ffd6ff"/>
+             <circle cx="60" cy="41" r="1.3" fill="#caffbf"/><circle cx="55" cy="56" r="1.1" fill="#a0e9ff"/>`}) },
+  { name: "Arcoíris · Rainbow", build: () => turtleSVG({shell:"#e63946", shellDark:"#b00020", skin:"#ffd166",
+      extra:`<circle cx="50" cy="52" r="25" fill="#f3722c"/>
+             <circle cx="50" cy="52" r="20" fill="#f9c74f"/>
+             <circle cx="50" cy="52" r="15" fill="#90be6d"/>
+             <circle cx="50" cy="52" r="10" fill="#4ea8de"/>
+             <circle cx="50" cy="52" r="5"  fill="#9b5de5"/>`}) },
+  { name: "Robot",          build: () => turtleSVG({shell:"#9aa5b1", shellDark:"#4b5563", skin:"#cbd5e1",
+      extra:`<rect x="40" y="43" width="20" height="14" rx="3" fill="#1f2937"/>
+             <circle cx="46" cy="50" r="2.4" fill="#34d399"/><circle cx="54" cy="50" r="2.4" fill="#34d399"/>
+             <circle cx="34" cy="37" r="2.1" fill="#4b5563"/><circle cx="66" cy="37" r="2.1" fill="#4b5563"/>
+             <circle cx="34" cy="67" r="2.1" fill="#4b5563"/><circle cx="66" cy="67" r="2.1" fill="#4b5563"/>`}) },
 ];
 
 /* =========================================================
@@ -349,10 +395,48 @@ const CMDS = {
   width:"width", penwidth:"width", grosor:"width", ancho:"width",
   hideturtle:"hide", ht:"hide", oculta:"hide", ot:"hide",
   showturtle:"show", st:"show", muestra:"show", mt:"show",
-  repeat:"repeat", repite:"repeat",
+  repeat:"repeat", repite:"repeat", rp:"repeat",
+  // figures / figuras (with short aliases: ci cu tr rc pg es)
+  circle:"circle", circulo:"circle", ci:"circle",
+  square:"square", cuadrado:"square", cu:"square",
+  triangle:"triangle", triangulo:"triangle", tr:"triangle",
+  rectangle:"rectangle", rectangulo:"rectangle", rc:"rectangle",
+  polygon:"polygon", poligono:"polygon", pg:"polygon",
+  star:"star", estrella:"star", es:"star",
 };
 
 const ARG_NUM   = new Set(["move","moveb","right","left","width"]);
+
+// Figures expand into move/turn primitives, so they animate and use the
+// current pen color/width/heading. Each closed figure returns the turtle
+// to its starting heading (and, for closed shapes, its starting point).
+function polygonSteps(sides, side) {
+  const turn = 360 / sides, out = [];
+  for (let k = 0; k < sides; k++) { out.push({ op: "move", value: side }, { op: "right", value: turn }); }
+  return out;
+}
+function rectSteps(w, h) {
+  return [
+    { op: "move", value: w }, { op: "right", value: 90 },
+    { op: "move", value: h }, { op: "right", value: 90 },
+    { op: "move", value: w }, { op: "right", value: 90 },
+    { op: "move", value: h }, { op: "right", value: 90 },
+  ];
+}
+function starSteps(side) { // classic 5-point star
+  const out = [];
+  for (let k = 0; k < 5; k++) { out.push({ op: "move", value: side }, { op: "right", value: 144 }); }
+  return out;
+}
+// op -> { n: numeric-args, make: (args) => steps }
+const FIG = {
+  circle:    { n: 1, make: (a) => polygonSteps(36, (2 * Math.PI * a[0]) / 36) },
+  square:    { n: 1, make: (a) => polygonSteps(4, a[0]) },
+  triangle:  { n: 1, make: (a) => polygonSteps(3, a[0]) },
+  star:      { n: 1, make: (a) => starSteps(a[0]) },
+  polygon:   { n: 2, make: (a) => polygonSteps(Math.max(3, Math.round(a[0])), a[1]) },
+  rectangle: { n: 2, make: (a) => rectSteps(a[0], a[1]) },
+};
 const COLORS = {
   red:"#e63946", rojo:"#e63946",
   blue:"#1d72c4", azul:"#1d72c4",
@@ -364,6 +448,9 @@ const COLORS = {
   black:"#2b2c34", negro:"#2b2c34",
   white:"#ffffff", blanco:"#ffffff",
   brown:"#8b5a2b", marron:"#8b5a2b", cafe:"#8b5a2b",
+  gray:"#7d8597", grey:"#7d8597", gris:"#7d8597",
+  turquoise:"#06b6d4", cyan:"#06b6d4", turquesa:"#06b6d4",
+  lime:"#84cc16", lima:"#84cc16",
 };
 
 /* =========================================================
@@ -415,6 +502,18 @@ function parseTokens(tokens) {
       continue;
     }
 
+    if (FIG[op]) {
+      const spec = FIG[op];
+      const args = [];
+      for (let k = 0; k < spec.n; k++) {
+        const v = parseFloat(tokens[i++]);
+        if (!Number.isFinite(v)) throw new ParseError("need-num", raw);
+        args.push(v);
+      }
+      steps.push(...spec.make(args));
+      continue;
+    }
+
     if (ARG_NUM.has(op)) {
       const v = parseFloat(tokens[i++]);
       if (!Number.isFinite(v)) throw new ParseError("need-num", raw);
@@ -448,24 +547,25 @@ function enqueue(steps) {
   if (!running) drain();
 }
 
-function speedFactor() {
-  // pixels per frame for moves; degrees per frame for turns
-  const v = parseInt(speedEl.value, 10); // 1..100
-  return v;
-}
+// Speed slider (1..100) -> motion rate. Time-based so the turtle always
+// visibly walks/turns; the slider scales how fast. (Slow ≈ stroll, fast ≈ zippy.)
+function speedPxPerSec()  { const v = parseInt(speedEl.value, 10); return 60  + v * v * 0.14; } //  ~74 .. ~1460
+function speedDegPerSec() { const v = parseInt(speedEl.value, 10); return 120 + v * v * 0.13; } // ~133 .. ~1420
 
 function drain() {
   running = true;
-  let anim = null; // current in-progress move/turn
+  let anim = null;        // current in-progress move/turn
+  let last = performance.now();
 
-  function step() {
+  function step(now) {
+    const dt = Math.min(64, now - last); // ms; clamp so tab-switch pauses don't jump
+    last = now;
     if (!anim) {
       if (queue.length === 0) { running = false; redrawTurtle(); return; }
-      const s = queue.shift();
-      anim = startStep(s);
-      if (!anim) { requestAnimationFrame(step); return; } // instant op done
+      anim = startStep(queue.shift());
+      if (!anim) { requestAnimationFrame(step); return; } // instant op done this frame
     }
-    const done = anim.tick();
+    const done = anim.tick(dt);
     redrawTurtle();
     if (done) anim = null;
     requestAnimationFrame(step);
@@ -486,12 +586,14 @@ function startStep(s) {
       turtle.x = 0; turtle.y = 0; turtle.heading = 0; return null;
     case "right": case "left": {
       const total = (s.op === "right" ? 1 : -1) * s.value;
-      const perFrame = Math.max(2, speedFactor() / 6) * Math.sign(total || 1);
-      let done = 0;
-      return { tick() {
-        const remain = total - done;
-        if (Math.abs(remain) <= Math.abs(perFrame)) { turtle.heading += remain; done = total; return true; }
-        turtle.heading += perFrame; done += perFrame; return false;
+      const startH = turtle.heading;
+      const duration = Math.max(70, Math.abs(total) / speedDegPerSec() * 1000); // ms
+      let elapsed = 0;
+      return { tick(dt) {
+        elapsed += dt;
+        const t = Math.min(1, elapsed / duration);
+        turtle.heading = startH + total * t;
+        return t >= 1;
       }};
     }
     case "move": case "moveb": {
@@ -502,11 +604,11 @@ function startStep(s) {
       const fy = Math.cos(r) * dist;   // y component (up positive)
       const startX = turtle.x, startY = turtle.y;
       const len = Math.hypot(fx, fy);
-      const speedPx = Math.max(3, speedFactor());
-      let travelled = 0;
-      return { tick() {
-        travelled += speedPx;
-        let t = len === 0 ? 1 : Math.min(1, travelled / len);
+      const duration = Math.max(90, len / speedPxPerSec() * 1000); // ms
+      let elapsed = 0;
+      return { tick(dt) {
+        elapsed += dt;
+        const t = len === 0 ? 1 : Math.min(1, elapsed / duration);
         const nx = startX + fx * t, ny = startY + fy * t;
         if (turtle.penDown) {
           const a = toScreen(turtle.x, turtle.y);
@@ -621,11 +723,14 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 });
 
 const EXAMPLES = [
-  "repite 4 [ adelante 100 derecha 90 ]",
-  "color rojo\nrepite 3 [ adelante 120 derecha 120 ]",
-  "repite 36 [ adelante 12 derecha 10 ]",
-  "color azul\nrepite 5 [ adelante 100 derecha 144 ]",
-  "grosor 8\ncolor verde\nrepite 6 [ adelante 80 izquierda 60 ]",
+  "color rojo\ncirculo 70",
+  "color azul\ncuadrado 100",
+  "color verde\ntriangulo 110",
+  "color morado\nestrella 120",
+  "color naranja\npoligono 6 60",
+  "rectangulo 150 80",
+  "repite 6 [ circulo 50 derecha 60 ]",
+  "grosor 6\nrepite 5 [ cuadrado 90 derecha 72 ]",
 ];
 let exIdx = 0;
 document.getElementById("exampleBtn").addEventListener("click", () => {
@@ -646,6 +751,17 @@ TURTLES.forEach((t, i) => {
   div.innerHTML = `<svg viewBox="0 0 100 100">${t.build()}</svg>`;
   div.addEventListener("click", () => loadTurtle(i));
   picker.appendChild(div);
+});
+
+/* start typing anywhere -> focus the active input */
+document.addEventListener("keydown", (e) => {
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA") return;   // already typing
+  if (e.ctrlKey || e.metaKey || e.altKey) return;       // let shortcuts pass
+  // printable keys, Enter or Backspace -> grab focus so the keystroke lands in the field
+  if (e.key.length === 1 || e.key === "Enter" || e.key === "Backspace") {
+    (mode === "batch" ? cmdArea : cmdInput).focus();
+  }
 });
 
 /* init */
