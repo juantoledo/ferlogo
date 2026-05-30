@@ -30,7 +30,7 @@ start index.html         # Windows
 
 ## 🎮 Cómo jugar
 
-1. **Elige una tortuga** — escoge entre seis tortugas SVG (verde, azul, rosa, naranja, ninja, bebé).
+1. **Elige una tortuga** — escoge entre nueve tortugas SVG (verde, azul, rosa, naranja, ninja, bebé, galáctica, arcoíris, robot).
 2. **Escribe una orden** en la barra lateral y presiona **Enter** — se ejecuta de inmediato.
 3. ¿Quieres escribir un programa completo? Cambia al modo **Lote / Batch**, escribe varias líneas
    y presiona **▶ Ejecutar / Run**.
@@ -38,6 +38,11 @@ start index.html         # Windows
    y usa el **control de velocidad 🐌 → 🐇** para que la tortuga camine lento o rápido.
 
 ## 📖 Órdenes (español e inglés)
+
+> 🖨️ **¿Para imprimir?** Abre [**cheatsheet.html**](cheatsheet.html) en el navegador y pulsa
+> *Imprimir* — muestra cada figura dibujada de verdad y con colores. (También hay una versión
+> de solo texto en [cheatsheet.md](cheatsheet.md).) · Open `cheatsheet.html` and print it; it
+> shows every shape really drawn, in color.
 
 | Qué hace | Español | English |
 |---|---|---|
@@ -55,18 +60,33 @@ start index.html         # Windows
 | Mostrar la tortuga | `muestra` / `mt` | `showturtle` / `st` |
 | Repetir un bloque | `repite 4 [ ... ]` | `repeat 4 [ ... ]` |
 
+### 🔷 Figuras · Figures
+
+Dibuja figuras completas con una sola orden (usan el color y grosor actuales):
+
+| Figura | Español | English |
+|---|---|---|
+| Círculo (radio) | `circulo 60` | `circle 60` |
+| Cuadrado (lado) | `cuadrado 80` | `square 80` |
+| Triángulo (lado) | `triangulo 90` | `triangle 90` |
+| Rectángulo (ancho alto) | `rectangulo 120 60` | `rectangle 120 60` |
+| Polígono (lados lado) | `poligono 6 60` | `polygon 6 60` |
+| Estrella (tamaño) | `estrella 120` | `star 120` |
+
 **Colores:** rojo/red, azul/blue, verde/green, amarillo/yellow, naranja/orange,
-morado/purple, rosa/pink, negro/black, marron/brown, blanco/white — o cualquier hex como `#ff0000`.
+morado/purple, rosa/pink, negro/black, marron/brown, blanco/white, gris/gray,
+turquesa/turquoise, lima/lime — o cualquier hex como `#ff0000`.
 
 No importan las mayúsculas ni los acentos: `atrás`, `ATRAS` y `atras` funcionan igual.
 
 ### Prueba esto 👇
 
 ```
-repite 4 [ adelante 100 derecha 90 ]      # un cuadrado
 color rojo
-repite 3 [ adelante 120 derecha 120 ]     # un triángulo rojo
-repite 36 [ adelante 12 derecha 10 ]      # un círculo
+circulo 70                                # un círculo rojo
+estrella 120                              # una estrella
+poligono 6 60                             # un hexágono
+repite 6 [ circulo 50 derecha 60 ]        # una flor de círculos
 ```
 
 ## 🛠️ Cómo está hecho
@@ -76,8 +96,9 @@ Un único archivo `index.html` autónomo:
 - **JavaScript puro** — sin frameworks, sin dependencias.
 - Un **`<canvas>`** de HTML5 guarda el dibujo; la tortuga es un **SVG** que se mueve y gira con
   transformaciones CSS, para que se vea nítida y se anime con suavidad.
-- Un pequeño tokenizador → analizador recursivo (que expande `repite`/`repeat`, incluso anidados)
-  → una cola de animación que se vacía con `requestAnimationFrame` para que los niños *vean* cada paso.
+- Un pequeño tokenizador → analizador recursivo (que expande `repite`/`repeat` anidados y las
+  figuras como `circulo` o `cuadrado` en órdenes básicas de avanzar/girar) → una cola de animación
+  que se vacía con `requestAnimationFrame` para que los niños *vean* cada paso.
 
 ## 💛 Licencia
 

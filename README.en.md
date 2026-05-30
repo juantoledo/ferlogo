@@ -29,13 +29,17 @@ start index.html         # Windows
 
 ## 🎮 How to play
 
-1. **Pick a turtle** — choose from six SVG turtle friends (green, blue, pink, orange, ninja, baby).
+1. **Pick a turtle** — choose from nine SVG turtle friends (green, blue, pink, orange, ninja, baby, galaxy, rainbow, robot).
 2. **Type a command** in the sidebar and press **Enter** — it runs right away.
 3. Want to write a whole program? Flip to **Batch / Lote** mode, type several lines, and press **▶ Run / Ejecutar**.
 4. Tap **🎲 Example / Ejemplo** for ready-made drawings, **🧹 Clear / Limpiar** to start over,
    and use the **🐌 → 🐇 speed slider** to make the turtle walk slow or fast.
 
 ## 📖 Commands (English & Spanish)
+
+> 🖨️ **Want to print it?** Open [**cheatsheet.html**](cheatsheet.html) in a browser and hit
+> *Print* — it shows every shape really drawn, in color, so kids see exactly what to type.
+> (A plain-text version also lives in [cheatsheet.md](cheatsheet.md).)
 
 | What it does | English | Español |
 |---|---|---|
@@ -53,18 +57,33 @@ start index.html         # Windows
 | Show the turtle | `showturtle` / `st` | `muestra` / `mt` |
 | Repeat a block | `repeat 4 [ ... ]` | `repite 4 [ ... ]` |
 
+### 🔷 Figures
+
+Draw a whole shape with a single command (they use the current pen color and width):
+
+| Figure | English | Español |
+|---|---|---|
+| Circle (radius) | `circle 60` | `circulo 60` |
+| Square (side) | `square 80` | `cuadrado 80` |
+| Triangle (side) | `triangle 90` | `triangulo 90` |
+| Rectangle (width height) | `rectangle 120 60` | `rectangulo 120 60` |
+| Polygon (sides side) | `polygon 6 60` | `poligono 6 60` |
+| Star (size) | `star 120` | `estrella 120` |
+
 **Colors:** red/rojo, blue/azul, green/verde, yellow/amarillo, orange/naranja,
-purple/morado, pink/rosa, black/negro, brown/marron, white/blanco — or any hex like `#ff0000`.
+purple/morado, pink/rosa, black/negro, brown/marron, white/blanco, gray/gris,
+turquoise/turquesa, lime/lima — or any hex like `#ff0000`.
 
 Commands are case- and accent-insensitive, so `atrás`, `ATRAS`, and `atras` all work.
 
 ### Try this 👇
 
 ```
-repite 4 [ adelante 100 derecha 90 ]      # a square
-color rojo
-repite 3 [ adelante 120 derecha 120 ]     # a red triangle
-repite 36 [ adelante 12 derecha 10 ]      # a circle
+color red
+circle 70                                 # a red circle
+star 120                                  # a star
+polygon 6 60                              # a hexagon
+repeat 6 [ circle 50 right 60 ]           # a flower of circles
 ```
 
 ## 🛠️ How it's built
@@ -74,8 +93,9 @@ A single self-contained `index.html`:
 - **Vanilla JavaScript** — no frameworks, no dependencies.
 - An HTML5 **`<canvas>`** holds the drawing; the turtle is an inline **SVG** moved and
   rotated with CSS transforms, so it stays crisp and animates smoothly.
-- A tiny tokenizer → recursive parser (which expands `repeat`/`repite`, even nested) →
-  an animation queue drained with `requestAnimationFrame` so kids *see* each step.
+- A tiny tokenizer → recursive parser (which expands nested `repeat`/`repite` and figures
+  like `circle`/`square` into basic forward/turn moves) → an animation queue drained with
+  `requestAnimationFrame` so kids *see* each step.
 
 ## 💛 License
 
