@@ -1,25 +1,26 @@
 # 🐢 FerLogo
 
-A fun, kid-friendly **Logo** turtle-graphics playground that runs in the browser.
-Type a command, press **Enter**, and watch a turtle walk across the screen drawing as it goes.
+Un divertido patio de juegos de **Logo** (gráficos de tortuga) para niños, que funciona en el
+navegador. Escribe una orden, presiona **Enter** y mira a la tortuga caminar por la pantalla
+dibujando a su paso.
 
-Commands work in **English *and* Spanish at the same time** — perfect for bilingual kids.
+Las órdenes funcionan en **inglés *y* español al mismo tiempo** — ideal para niños bilingües.
 
-> 🇪🇸 *¿Prefieres español?* → [**README.es.md**](README.es.md)
+> 🇬🇧 *Prefer English?* → [**README.en.md**](README.en.md)
 
-![FerLogo screenshot](images/screenshot.png)
+![Captura de FerLogo](images/screenshot.png)
 
-## ✨ A little story
+## ✨ Una pequeña historia
 
-When I was **7 years old** I first met Logo on an **Atari 800 XL**, typing `FORWARD` and
-`RIGHT` into a turtle and feeling the magic of telling a computer what to do. FerLogo is my
-small tribute to that moment — a modern, bilingual version so a new generation of kids can
-discover the same joy.
+Cuando tenía **7 años** conocí Logo por primera vez en un **Atari 800 XL**, escribiendo
+`FORWARD` y `RIGHT` para mover una tortuga y sintiendo la magia de decirle a una computadora
+qué hacer. FerLogo es mi pequeño homenaje a ese momento — una versión moderna y bilingüe para
+que una nueva generación de niños descubra la misma alegría.
 
-## 🚀 How to run
+## 🚀 Cómo ejecutarlo
 
-No installation, no build, no server. Just **open `index.html`** in any browser
-(double-click it, or drag it into a browser window).
+Sin instalación, sin compilar, sin servidor. Solo **abre `index.html`** en cualquier navegador
+(haz doble clic, o arrástralo a una ventana del navegador).
 
 ```bash
 xdg-open index.html      # Linux
@@ -27,56 +28,57 @@ open index.html          # macOS
 start index.html         # Windows
 ```
 
-## 🎮 How to play
+## 🎮 Cómo jugar
 
-1. **Pick a turtle** — choose from six SVG turtle friends (green, blue, pink, orange, ninja, baby).
-2. **Type a command** in the sidebar and press **Enter** — it runs right away.
-3. Want to write a whole program? Flip to **Batch / Lote** mode, type several lines, and press **▶ Run / Ejecutar**.
-4. Tap **🎲 Example / Ejemplo** for ready-made drawings, **🧹 Clear / Limpiar** to start over,
-   and use the **🐌 → 🐇 speed slider** to make the turtle walk slow or fast.
+1. **Elige una tortuga** — escoge entre seis tortugas SVG (verde, azul, rosa, naranja, ninja, bebé).
+2. **Escribe una orden** en la barra lateral y presiona **Enter** — se ejecuta de inmediato.
+3. ¿Quieres escribir un programa completo? Cambia al modo **Lote / Batch**, escribe varias líneas
+   y presiona **▶ Ejecutar / Run**.
+4. Toca **🎲 Ejemplo / Example** para dibujos listos, **🧹 Limpiar / Clear** para empezar de nuevo,
+   y usa el **control de velocidad 🐌 → 🐇** para que la tortuga camine lento o rápido.
 
-## 📖 Commands (English & Spanish)
+## 📖 Órdenes (español e inglés)
 
-| What it does | English | Español |
+| Qué hace | Español | English |
 |---|---|---|
-| Move forward | `forward` / `fd` | `adelante` / `av` |
-| Move back | `back` / `bk` | `atras` / `re` |
-| Turn right | `right` / `rt` | `derecha` / `gd` |
-| Turn left | `left` / `lt` | `izquierda` / `gi` |
-| Pen up (stop drawing) | `penup` / `pu` | `subelapiz` / `sl` |
-| Pen down (start drawing) | `pendown` / `pd` | `bajalapiz` / `bl` |
-| Set pen color | `color red` | `color rojo` |
-| Set pen width | `width 5` | `grosor 5` |
-| Clear the board | `clear` / `cs` | `limpia` / `borra` |
-| Go to the center | `home` | `casa` |
-| Hide the turtle | `hideturtle` / `ht` | `oculta` / `ot` |
-| Show the turtle | `showturtle` / `st` | `muestra` / `mt` |
-| Repeat a block | `repeat 4 [ ... ]` | `repite 4 [ ... ]` |
+| Avanzar | `adelante` / `av` | `forward` / `fd` |
+| Retroceder | `atras` / `re` | `back` / `bk` |
+| Girar a la derecha | `derecha` / `gd` | `right` / `rt` |
+| Girar a la izquierda | `izquierda` / `gi` | `left` / `lt` |
+| Subir el lápiz (no dibuja) | `subelapiz` / `sl` | `penup` / `pu` |
+| Bajar el lápiz (dibuja) | `bajalapiz` / `bl` | `pendown` / `pd` |
+| Cambiar el color | `color rojo` | `color red` |
+| Cambiar el grosor | `grosor 5` | `width 5` |
+| Limpiar la pizarra | `limpia` / `borra` | `clear` / `cs` |
+| Ir al centro | `casa` | `home` |
+| Ocultar la tortuga | `oculta` / `ot` | `hideturtle` / `ht` |
+| Mostrar la tortuga | `muestra` / `mt` | `showturtle` / `st` |
+| Repetir un bloque | `repite 4 [ ... ]` | `repeat 4 [ ... ]` |
 
-**Colors:** red/rojo, blue/azul, green/verde, yellow/amarillo, orange/naranja,
-purple/morado, pink/rosa, black/negro, brown/marron, white/blanco — or any hex like `#ff0000`.
+**Colores:** rojo/red, azul/blue, verde/green, amarillo/yellow, naranja/orange,
+morado/purple, rosa/pink, negro/black, marron/brown, blanco/white — o cualquier hex como `#ff0000`.
 
-Commands are case- and accent-insensitive, so `atrás`, `ATRAS`, and `atras` all work.
+No importan las mayúsculas ni los acentos: `atrás`, `ATRAS` y `atras` funcionan igual.
 
-### Try this 👇
+### Prueba esto 👇
 
 ```
-repite 4 [ adelante 100 derecha 90 ]      # a square
+repite 4 [ adelante 100 derecha 90 ]      # un cuadrado
 color rojo
-repite 3 [ adelante 120 derecha 120 ]     # a red triangle
-repite 36 [ adelante 12 derecha 10 ]      # a circle
+repite 3 [ adelante 120 derecha 120 ]     # un triángulo rojo
+repite 36 [ adelante 12 derecha 10 ]      # un círculo
 ```
 
-## 🛠️ How it's built
+## 🛠️ Cómo está hecho
 
-A single self-contained `index.html`:
+Un único archivo `index.html` autónomo:
 
-- **Vanilla JavaScript** — no frameworks, no dependencies.
-- An HTML5 **`<canvas>`** holds the drawing; the turtle is an inline **SVG** moved and
-  rotated with CSS transforms, so it stays crisp and animates smoothly.
-- A tiny tokenizer → recursive parser (which expands `repeat`/`repite`, even nested) →
-  an animation queue drained with `requestAnimationFrame` so kids *see* each step.
+- **JavaScript puro** — sin frameworks, sin dependencias.
+- Un **`<canvas>`** de HTML5 guarda el dibujo; la tortuga es un **SVG** que se mueve y gira con
+  transformaciones CSS, para que se vea nítida y se anime con suavidad.
+- Un pequeño tokenizador → analizador recursivo (que expande `repite`/`repeat`, incluso anidados)
+  → una cola de animación que se vacía con `requestAnimationFrame` para que los niños *vean* cada paso.
 
-## 💛 License
+## 💛 Licencia
 
-Made with love for curious kids. Use it, share it, remix it.
+Hecho con cariño para niños curiosos. Úsalo, compártelo, modifícalo.
