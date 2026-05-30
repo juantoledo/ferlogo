@@ -8,6 +8,13 @@ Las órdenes funcionan en **inglés *y* español al mismo tiempo** — ideal par
 
 > 🇬🇧 *Prefer English?* → [**README.en.md**](README.en.md)
 
+### ▶️ Jugar ahora · Play now
+
+**👉 [juantoledo.github.io/ferlogo](https://juantoledo.github.io/ferlogo/)**
+
+_(Se ejecuta en el navegador, sin instalar nada · Runs in the browser, nothing to install.
+Requiere activar GitHub Pages en el repositorio · needs GitHub Pages enabled for the repo.)_
+
 ![Captura de FerLogo](images/screenshot.png)
 
 ## ✨ Una pequeña historia

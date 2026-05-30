@@ -7,6 +7,12 @@ Commands work in **English *and* Spanish at the same time** — perfect for bili
 
 > 🇪🇸 *¿Prefieres español?* → [**README.md**](README.md)
 
+### ▶️ Play now
+
+**👉 [juantoledo.github.io/ferlogo](https://juantoledo.github.io/ferlogo/)**
+
+_(Runs in the browser, nothing to install. Needs GitHub Pages enabled for the repo.)_
+
 ![FerLogo screenshot](images/screenshot.png)
 
 ## ✨ A little story
