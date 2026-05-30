@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐢 FerLogo — Logo para niños / Logo for kids</title>
+<style>
+  :root {
+    --bg: #fef6e4;
+    --panel: #ffffff;
+    --ink: #2b2c34;
+    --accent: #ff7a59;
+    --accent2: #4ea8de;
+    --good: #2ec4b6;
+    --bad: #e76f51;
+    --radius: 18px;
+    --shadow: 0 6px 18px rgba(0,0,0,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "Comic Sans MS", "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  header {
+    flex: 0 0 auto;
+    padding: 10px 18px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    z-index: 2;
+  }
+  header h1 { font-size: 1.4rem; margin: 0; letter-spacing: .5px; }
+  header .sub { font-size: .85rem; opacity: .92; }
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 0;
+  }
+
+  /* ----- Playground ----- */
+  #stage {
+    flex: 1 1 auto;
+    position: relative;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,.06) 1px, transparent 0) 0 0 / 28px 28px,
+      #fffdf7;
+    overflow: hidden;
+  }
+  #board { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #turtle {
+    position: absolute;
+    width: 54px; height: 54px;
+    margin-left: -27px; margin-top: -27px;
+    left: 0; top: 0;
+    transition: none;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.25));
+    will-change: transform;
+  }
+
+  /* ----- Sidebar ----- */
+  aside {
+    flex: 0 0 340px;
+    background: var(--panel);
+    box-shadow: -4px 0 18px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    z-index: 1;
+  }
+  aside .scroll { overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: #fff8f0; border: 2px solid #ffe2d1; border-radius: var(--radius); padding: 12px; }
+  .card h2 { font-size: .95rem; margin: 0 0 8px; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+
+  /* turtle picker */
+  #turtlePicker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .turtle-thumb {
+    background: #fff; border: 3px solid transparent; border-radius: 14px;
+    padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: transform .12s, border-color .12s;
+  }
+  .turtle-thumb:hover { transform: scale(1.06); }
+  .turtle-thumb.active { border-color: var(--accent2); background: #eaf6ff; }
+  .turtle-thumb svg { width: 100%; height: auto; }
+
+  /* mode toggle */
+  .toggle { display: flex; background: #ffe2d1; border-radius: 999px; padding: 4px; }
+  .toggle button {
+    flex: 1; border: 0; background: transparent; cursor: pointer;
+    padding: 8px 6px; border-radius: 999px; font-weight: bold; font-size: .9rem; color: var(--ink);
+    font-family: inherit;
+  }
+  .toggle button.active { background: var(--accent); color: #fff; }
+
+  /* input area */
+  #cmdInput, #cmdArea {
+    width: 100%; border: 2px solid #ffd6c2; border-radius: 14px; padding: 12px;
+    font-family: "Courier New", monospace; font-size: 1.05rem; color: var(--ink); background: #fff;
+    resize: vertical;
+  }
+  #cmdInput:focus, #cmdArea:focus { outline: 3px solid var(--accent2); border-color: var(--accent2); }
+  #cmdArea { min-height: 130px; display: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    border: 0; cursor: pointer; border-radius: 14px; padding: 10px 14px; font-weight: bold;
+    font-size: .95rem; color: #fff; background: var(--accent); box-shadow: var(--shadow);
+    font-family: inherit; transition: transform .1s;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn.blue { background: var(--accent2); }
+  .btn.ghost { background: #fff; color: var(--ink); border: 2px solid #ffd6c2; box-shadow: none; }
+  #runBtn { display: none; }
+
+  /* speed */
+  .speed { display: flex; align-items: center; gap: 8px; }
+  .speed input[type=range] { flex: 1; accent-color: var(--accent2); }
+
+  /* log */
+  #log { max-height: 160px; overflow-y: auto; font-family: "Courier New", monospace; font-size: .85rem; display: flex; flex-direction: column-reverse; gap: 4px; }
+  #log .line { padding: 4px 8px; border-radius: 8px; background: #fff; }
+  #log .ok { color: #1b7a6e; }
+  #log .err { color: var(--bad); background: #ffeae3; }
+  #log .echo { color: #555; }
+
+  /* cheat sheet */
+  details summary { cursor: pointer; font-weight: bold; color: var(--accent2); list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  table.cheat { width: 100%; border-collapse: collapse; font-size: .78rem; margin-top: 8px; }
+  table.cheat th, table.cheat td { text-align: left; padding: 3px 5px; border-bottom: 1px solid #ffe2d1; }
+  table.cheat th { color: var(--accent); }
+  table.cheat code { background: #fff3e9; padding: 1px 4px; border-radius: 5px; }
+
+  @media (max-width: 760px) {
+    main { flex-direction: column; }
+    aside { flex: 1 1 auto; }
+    #stage { flex: 0 0 45vh; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <span style="font-size:1.8rem">🐢</span>
+    <div>
+      <h1>FerLogo</h1>
+      <div class="sub">Programa con la tortuga · Code with the turtle</div>
+    </div>
+  </header>
+
+  <main>
+    <section id="stage">
+      <canvas id="board"></canvas>
+      <svg id="turtle" viewBox="0 0 100 100"></svg>
+    </section>
+
+    <aside>
+      <div class="scroll">
+        <!-- Turtle picker -->
+        <div class="card">
+          <h2>🐢 Elige tu tortuga · Pick your turtle</h2>
+          <div id="turtlePicker"></div>
+        </div>
+
+        <!-- Mode + input -->
+        <div class="card">
+          <h2>⌨️ Escribe órdenes · Type commands</h2>
+          <div class="toggle" id="modeToggle">
+            <button data-mode="single" class="active">Una a una · Single</button>
+            <button data-mode="batch">Lote · Batch</button>
+          </div>
+          <p style="font-size:.78rem;margin:8px 2px;color:#777" id="modeHint">
+            Escribe una orden y presiona <b>Enter</b> · Type a command and press <b>Enter</b>
+          </p>
+          <input id="cmdInput" placeholder="adelante 100" autocomplete="off" spellcheck="false">
+          <textarea id="cmdArea" placeholder="repite 4 [ adelante 100 derecha 90 ]" spellcheck="false"></textarea>
+          <div class="row" style="margin-top:8px">
+            <button class="btn blue" id="runBtn">▶ Ejecutar · Run</button>
+            <button class="btn" id="exampleBtn">🎲 Ejemplo · Example</button>
+            <button class="btn ghost" id="clearBtn">🧹 Limpiar · Clear</button>
+          </div>
+          <div class="speed" style="margin-top:10px">
+            <span>🐌</span>
+            <input type="range" id="speed" min="1" max="100" value="55">
+            <span>🐇</span>
+          </div>
+        </div>
+
+        <!-- Log -->
+        <div class="card">
+          <h2>📜 Registro · Log</h2>
+          <div id="log"></div>
+        </div>
+
+        <!-- Cheat sheet -->
+        <div class="card">
+          <details>
+            <summary>📖 Lista de órdenes · Command list</summary>
+            <table class="cheat">
+              <tr><th>Qué hace · What</th><th>English</th><th>Español</th></tr>
+              <tr><td>Avanza · forward</td><td><code>forward</code> / <code>fd</code></td><td><code>adelante</code> / <code>av</code></td></tr>
+              <tr><td>Retrocede · back</td><td><code>back</code> / <code>bk</code></td><td><code>atras</code> / <code>re</code></td></tr>
+              <tr><td>Gira derecha · right</td><td><code>right</code> / <code>rt</code></td><td><code>derecha</code> / <code>gd</code></td></tr>
+              <tr><td>Gira izquierda · left</td><td><code>left</code> / <code>lt</code></td><td><code>izquierda</code> / <code>gi</code></td></tr>
+              <tr><td>Sube lápiz · pen up</td><td><code>penup</code> / <code>pu</code></td><td><code>subelapiz</code> / <code>sl</code></td></tr>
+              <tr><td>Baja lápiz · pen down</td><td><code>pendown</code> / <code>pd</code></td><td><code>bajalapiz</code> / <code>bl</code></td></tr>
+              <tr><td>Color · color</td><td><code>color red</code></td><td><code>color rojo</code></td></tr>
+              <tr><td>Grosor · width</td><td><code>width 5</code></td><td><code>grosor 5</code></td></tr>
+              <tr><td>Limpia · clear</td><td><code>clear</code> / <code>cs</code></td><td><code>limpia</code> / <code>borra</code></td></tr>
+              <tr><td>Al centro · home</td><td><code>home</code></td><td><code>casa</code></td></tr>
+              <tr><td>Oculta · hide</td><td><code>hideturtle</code> / <code>ht</code></td><td><code>oculta</code> / <code>ot</code></td></tr>
+              <tr><td>Muestra · show</td><td><code>showturtle</code> / <code>st</code></td><td><code>muestra</code> / <code>mt</code></td></tr>
+              <tr><td>Repite · loop</td><td><code>repeat 4 [ ... ]</code></td><td><code>repite 4 [ ... ]</code></td></tr>
+            </table>
+            <p style="font-size:.74rem;color:#888;margin-top:6px">
+              Colores · Colors: red/rojo, blue/azul, green/verde, yellow/amarillo,
+              orange/naranja, purple/morado, pink/rosa, black/negro, brown/marron, white/blanco.
+            </p>
+          </details>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+<script>
+"use strict";
+
+/* =========================================================
+   1. SVG TURTLE DESIGNS  (top-down, head points UP = heading 0)
+   Each builder takes the palette and returns an <svg> innerHTML.
+   ViewBox 0..100, head near top (y small), tail near bottom.
+   ========================================================= */
+function turtleSVG(p) {
+  // p = {shell, shellDark, skin, spot, extra}
+  return `
+    <!-- back legs -->
+    <ellipse cx="28" cy="72" rx="11" ry="8" fill="${p.skin}" transform="rotate(35 28 72)"/>
+    <ellipse cx="72" cy="72" rx="11" ry="8" fill="${p.skin}" transform="rotate(-35 72 72)"/>
+    <!-- front legs -->
+    <ellipse cx="26" cy="38" rx="11" ry="8" fill="${p.skin}" transform="rotate(-35 26 38)"/>
+    <ellipse cx="74" cy="38" rx="11" ry="8" fill="${p.skin}" transform="rotate(35 74 38)"/>
+    <!-- tail -->
+    <path d="M50 84 L44 96 L56 96 Z" fill="${p.skin}"/>
+    <!-- head -->
+    <circle cx="50" cy="16" r="13" fill="${p.skin}"/>
+    <circle cx="45" cy="13" r="2.4" fill="#1c1c1c"/>
+    <circle cx="55" cy="13" r="2.4" fill="#1c1c1c"/>
+    <!-- shell -->
+    <circle cx="50" cy="52" r="30" fill="${p.shell}" stroke="${p.shellDark}" stroke-width="3"/>
+    <!-- shell pattern -->
+    <path d="M50 30 L50 74 M30 52 L70 52 M36 37 L64 67 M64 37 L36 67"
+          stroke="${p.shellDark}" stroke-width="2.4" fill="none" opacity=".55"/>
+    <circle cx="50" cy="52" r="9" fill="${p.shellDark}" opacity=".5"/>
+    ${p.extra || ""}
+  `;
+}
+
+const TURTLES = [
+  { name: "Verde · Green",  build: () => turtleSVG({shell:"#7bc96f", shellDark:"#3f8c3a", skin:"#a3d977"}) },
+  { name: "Azul · Blue",    build: () => turtleSVG({shell:"#62b6cb", shellDark:"#1b4965", skin:"#8fd3e8"}) },
+  { name: "Rosa · Pink",    build: () => turtleSVG({shell:"#f4a6c0", shellDark:"#c04f7a", skin:"#ffc9de"}) },
+  { name: "Naranja · Orange", build: () => turtleSVG({shell:"#f6a73f", shellDark:"#c1660a", skin:"#ffce85"}) },
+  { name: "Ninja",          build: () => turtleSVG({shell:"#4a4e69", shellDark:"#22223b", skin:"#5cae6e",
+      extra:`<rect x="34" y="9" width="32" height="7" rx="3" fill="#c1121f"/>
+             <rect x="62" y="9" width="14" height="5" rx="2" fill="#c1121f" transform="rotate(20 62 11)"/>`}) },
+  { name: "Bebé · Baby",    build: () => `<g transform="translate(50 50) scale(0.8) translate(-50 -50)">${
+      turtleSVG({shell:"#ffd6a5", shellDark:"#e8a06b", skin:"#fff1c1",
+      extra:`<circle cx="44" cy="13" r="1.6" fill="#1c1c1c"/><circle cx="56" cy="13" r="1.6" fill="#1c1c1c"/>`})
+    }</g>` },
+];
+
+/* =========================================================
+   2. STATE & CANVAS
+   ========================================================= */
+const board   = document.getElementById("board");
+const ctx     = board.getContext("2d");
+const turtleEl= document.getElementById("turtle");
+const logEl   = document.getElementById("log");
+const speedEl = document.getElementById("speed");
+
+let DPR = 1;
+const turtle = { x: 0, y: 0, heading: 0, penDown: true, penColor: "#2b2c34", penWidth: 4, visible: true };
+let activeTurtle = 0;
+
+function resizeBoard() {
+  DPR = window.devicePixelRatio || 1;
+  const r = board.getBoundingClientRect();
+  // preserve drawing across resize
+  const snap = board.width ? ctx.getImageData(0, 0, board.width, board.height) : null;
+  board.width  = Math.max(1, Math.floor(r.width  * DPR));
+  board.height = Math.max(1, Math.floor(r.height * DPR));
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (snap) {
+    // best-effort restore (re-anchored at center below)
+  }
+  redrawTurtle();
+}
+
+function centerXY() {
+  const r = board.getBoundingClientRect();
+  return { cx: r.width / 2, cy: r.height / 2 };
+}
+function toScreen(tx, ty) {
+  const { cx, cy } = centerXY();
+  return { sx: cx + tx, sy: cy - ty };  // turtle y up -> screen y down
+}
+
+function redrawTurtle() {
+  const { sx, sy } = toScreen(turtle.x, turtle.y);
+  turtleEl.style.transform = `translate(${sx}px, ${sy}px) rotate(${turtle.heading}deg)`;
+  turtleEl.style.opacity = turtle.visible ? 1 : 0;
+}
+
+function loadTurtle(i) {
+  activeTurtle = i;
+  turtleEl.innerHTML = TURTLES[i].build();
+  [...document.querySelectorAll(".turtle-thumb")].forEach((t, k) =>
+    t.classList.toggle("active", k === i));
+}
+
+function clearScreen() {
+  ctx.clearRect(0, 0, board.width, board.height);
+}
+
+/* =========================================================
+   3. COMMAND DICTIONARY (bilingual, accent-insensitive)
+   ========================================================= */
+function normalize(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
+// keyword -> {op, arg} where arg: "num" | "color" | none
+const CMDS = {
+  forward:"move", fd:"move", adelante:"move", av:"move", avanza:"move",
+  back:"moveb", bk:"moveb", atras:"moveb", re:"moveb", retrocede:"moveb",
+  right:"right", rt:"right", derecha:"right", gd:"right", gira:"right",
+  left:"left", lt:"left", izquierda:"left", gi:"left",
+  penup:"penup", pu:"penup", subelapiz:"penup", sl:"penup", sube:"penup",
+  pendown:"pendown", pd:"pendown", bajalapiz:"pendown", bl:"pendown", baja:"pendown",
+  clear:"clear", cs:"clear", clearscreen:"clear", limpia:"clear", borra:"clear",
+  home:"home", casa:"home", centro:"home",
+  color:"color", pencolor:"color", lapiz:"color",
+  width:"width", penwidth:"width", grosor:"width", ancho:"width",
+  hideturtle:"hide", ht:"hide", oculta:"hide", ot:"hide",
+  showturtle:"show", st:"show", muestra:"show", mt:"show",
+  repeat:"repeat", repite:"repeat",
+};
+
+const ARG_NUM   = new Set(["move","moveb","right","left","width"]);
+const COLORS = {
+  red:"#e63946", rojo:"#e63946",
+  blue:"#1d72c4", azul:"#1d72c4",
+  green:"#2a9d39", verde:"#2a9d39",
+  yellow:"#f1c40f", amarillo:"#f1c40f",
+  orange:"#f3722c", naranja:"#f3722c",
+  purple:"#8e44ad", morado:"#8e44ad",
+  pink:"#ff5d8f", rosa:"#ff5d8f",
+  black:"#2b2c34", negro:"#2b2c34",
+  white:"#ffffff", blanco:"#ffffff",
+  brown:"#8b5a2b", marron:"#8b5a2b", cafe:"#8b5a2b",
+};
+
+/* =========================================================
+   4. TOKENIZER + PARSER  -> flat list of primitive steps
+   throws {token} on unknown words for friendly messaging
+   ========================================================= */
+function tokenize(src) {
+  return src.replace(/\[/g, " [ ").replace(/\]/g, " ] ")
+            .split(/\s+/).filter(Boolean);
+}
+
+class ParseError extends Error {
+  constructor(kind, token) { super(kind); this.kind = kind; this.token = token; }
+}
+
+// returns array of {op, value}
+function parseTokens(tokens) {
+  const steps = [];
+  let i = 0;
+  while (i < tokens.length) {
+    const raw = tokens[i++];
+    const word = normalize(raw);
+    const op = CMDS[word];
+
+    if (op === undefined) {
+      if (word === "]" || word === "[") throw new ParseError("bracket", raw);
+      throw new ParseError("unknown", raw);
+    }
+
+    if (op === "repeat") {
+      const nTok = tokens[i++];
+      const n = parseInt(nTok, 10);
+      if (!Number.isFinite(n)) throw new ParseError("need-num", raw);
+      if (tokens[i] !== "[") throw new ParseError("need-bracket", raw);
+      i++; // consume [
+      // collect balanced body
+      const body = [];
+      let depth = 1;
+      while (i < tokens.length && depth > 0) {
+        if (tokens[i] === "[") depth++;
+        else if (tokens[i] === "]") { depth--; if (depth === 0) break; }
+        body.push(tokens[i]);
+        i++;
+      }
+      if (depth !== 0) throw new ParseError("need-close", raw);
+      i++; // consume ]
+      const inner = parseTokens(body);
+      for (let k = 0; k < n; k++) steps.push(...inner);
+      continue;
+    }
+
+    if (ARG_NUM.has(op)) {
+      const v = parseFloat(tokens[i++]);
+      if (!Number.isFinite(v)) throw new ParseError("need-num", raw);
+      steps.push({ op, value: v });
+      continue;
+    }
+
+    if (op === "color") {
+      const c = tokens[i++];
+      if (c === undefined) throw new ParseError("need-color", raw);
+      const key = normalize(c);
+      const val = COLORS[key] || (/^#?[0-9a-f]{3,8}$/i.test(c) ? (c[0] === "#" ? c : "#" + c) : null);
+      if (!val) throw new ParseError("bad-color", c);
+      steps.push({ op, value: val });
+      continue;
+    }
+
+    steps.push({ op });
+  }
+  return steps;
+}
+
+/* =========================================================
+   5. EXECUTION QUEUE + ANIMATION
+   ========================================================= */
+let queue = [];
+let running = false;
+
+function enqueue(steps) {
+  queue.push(...steps);
+  if (!running) drain();
+}
+
+function speedFactor() {
+  // pixels per frame for moves; degrees per frame for turns
+  const v = parseInt(speedEl.value, 10); // 1..100
+  return v;
+}
+
+function drain() {
+  running = true;
+  let anim = null; // current in-progress move/turn
+
+  function step() {
+    if (!anim) {
+      if (queue.length === 0) { running = false; redrawTurtle(); return; }
+      const s = queue.shift();
+      anim = startStep(s);
+      if (!anim) { requestAnimationFrame(step); return; } // instant op done
+    }
+    const done = anim.tick();
+    redrawTurtle();
+    if (done) anim = null;
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function startStep(s) {
+  switch (s.op) {
+    case "penup":   turtle.penDown = false; return null;
+    case "pendown": turtle.penDown = true;  return null;
+    case "color":   turtle.penColor = s.value; return null;
+    case "width":   turtle.penWidth = Math.max(1, s.value); return null;
+    case "clear":   clearScreen(); return null;
+    case "hide":    turtle.visible = false; return null;
+    case "show":    turtle.visible = true; return null;
+    case "home":
+      turtle.x = 0; turtle.y = 0; turtle.heading = 0; return null;
+    case "right": case "left": {
+      const total = (s.op === "right" ? 1 : -1) * s.value;
+      const perFrame = Math.max(2, speedFactor() / 6) * Math.sign(total || 1);
+      let done = 0;
+      return { tick() {
+        const remain = total - done;
+        if (Math.abs(remain) <= Math.abs(perFrame)) { turtle.heading += remain; done = total; return true; }
+        turtle.heading += perFrame; done += perFrame; return false;
+      }};
+    }
+    case "move": case "moveb": {
+      const dist = (s.op === "move" ? 1 : -1) * s.value;
+      // heading 0 = up, clockwise positive
+      const r = turtle.heading * Math.PI / 180;
+      const fx = Math.sin(r) * dist;   // x component (right positive)
+      const fy = Math.cos(r) * dist;   // y component (up positive)
+      const startX = turtle.x, startY = turtle.y;
+      const len = Math.hypot(fx, fy);
+      const speedPx = Math.max(3, speedFactor());
+      let travelled = 0;
+      return { tick() {
+        travelled += speedPx;
+        let t = len === 0 ? 1 : Math.min(1, travelled / len);
+        const nx = startX + fx * t, ny = startY + fy * t;
+        if (turtle.penDown) {
+          const a = toScreen(turtle.x, turtle.y);
+          const b = toScreen(nx, ny);
+          ctx.strokeStyle = turtle.penColor;
+          ctx.lineWidth = turtle.penWidth;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(a.sx, a.sy);
+          ctx.lineTo(b.sx, b.sy);
+          ctx.stroke();
+        }
+        turtle.x = nx; turtle.y = ny;
+        return t >= 1;
+      }};
+    }
+    default: return null;
+  }
+}
+
+/* =========================================================
+   6. RUN + LOG
+   ========================================================= */
+function log(text, cls) {
+  const d = document.createElement("div");
+  d.className = "line " + (cls || "");
+  d.textContent = text;
+  logEl.prepend(d);
+}
+
+function friendly(err) {
+  switch (err.kind) {
+    case "unknown":     return `🤔 No conozco "${err.token}" · I don't know "${err.token}"`;
+    case "need-num":    return `🔢 "${err.token}" necesita un número · needs a number`;
+    case "need-color":  return `🎨 "color" necesita un color · needs a color`;
+    case "bad-color":   return `🎨 No conozco el color "${err.token}" · unknown color`;
+    case "need-bracket":return `[ ] Falta "[" después de repite · missing "[" after repeat`;
+    case "need-close":  return `[ ] Falta cerrar con "]" · missing closing "]"`;
+    case "bracket":     return `[ ] Corchete inesperado "${err.token}" · unexpected bracket`;
+    default:            return `😵 Algo salió mal · something went wrong`;
+  }
+}
+
+function run(src) {
+  const trimmed = src.trim();
+  if (!trimmed) return;
+  log(trimmed, "echo");
+  let steps;
+  try {
+    steps = parseTokens(tokenize(trimmed));
+  } catch (e) {
+    if (e instanceof ParseError) { log(friendly(e), "err"); return; }
+    log("😵 Algo salió mal · something went wrong", "err");
+    return;
+  }
+  log("✓ ¡Listo! · Done!", "ok");
+  enqueue(steps);
+}
+
+/* =========================================================
+   7. UI WIRING
+   ========================================================= */
+const cmdInput = document.getElementById("cmdInput");
+const cmdArea  = document.getElementById("cmdArea");
+const runBtn   = document.getElementById("runBtn");
+const modeHint = document.getElementById("modeHint");
+let mode = "single";
+let history = [], histPos = -1;
+
+document.getElementById("modeToggle").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  mode = b.dataset.mode;
+  [...e.currentTarget.children].forEach(c => c.classList.toggle("active", c === b));
+  const batch = mode === "batch";
+  cmdInput.style.display = batch ? "none" : "block";
+  cmdArea.style.display  = batch ? "block" : "none";
+  runBtn.style.display   = batch ? "inline-block" : "none";
+  modeHint.innerHTML = batch
+    ? 'Escribe varias líneas y pulsa <b>Ejecutar</b> · Write several lines and press <b>Run</b>'
+    : 'Escribe una orden y presiona <b>Enter</b> · Type a command and press <b>Enter</b>';
+  (batch ? cmdArea : cmdInput).focus();
+});
+
+cmdInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const v = cmdInput.value;
+    if (v.trim()) { history.push(v); histPos = history.length; }
+    run(v);
+    cmdInput.value = "";
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    if (histPos > 0) { histPos--; cmdInput.value = history[histPos]; }
+  } else if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (histPos < history.length - 1) { histPos++; cmdInput.value = history[histPos]; }
+    else { histPos = history.length; cmdInput.value = ""; }
+  }
+});
+
+runBtn.addEventListener("click", () => {
+  cmdArea.value.split("\n").forEach(line => { if (line.trim()) run(line); });
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  queue = [];
+  clearScreen();
+  turtle.x = 0; turtle.y = 0; turtle.heading = 0;
+  turtle.penDown = true; turtle.penColor = "#2b2c34"; turtle.penWidth = 4; turtle.visible = true;
+  redrawTurtle();
+  log("🧹 ¡Pizarra limpia! · Clean board!", "ok");
+});
+
+const EXAMPLES = [
+  "repite 4 [ adelante 100 derecha 90 ]",
+  "color rojo\nrepite 3 [ adelante 120 derecha 120 ]",
+  "repite 36 [ adelante 12 derecha 10 ]",
+  "color azul\nrepite 5 [ adelante 100 derecha 144 ]",
+  "grosor 8\ncolor verde\nrepite 6 [ adelante 80 izquierda 60 ]",
+];
+let exIdx = 0;
+document.getElementById("exampleBtn").addEventListener("click", () => {
+  const ex = EXAMPLES[exIdx % EXAMPLES.length]; exIdx++;
+  if (mode === "batch") { cmdArea.value = ex; cmdArea.focus(); }
+  else {
+    // run multi-line example in single mode too
+    ex.split("\n").forEach(line => { if (line.trim()) run(line); });
+  }
+});
+
+/* build turtle picker */
+const picker = document.getElementById("turtlePicker");
+TURTLES.forEach((t, i) => {
+  const div = document.createElement("div");
+  div.className = "turtle-thumb";
+  div.title = t.name;
+  div.innerHTML = `<svg viewBox="0 0 100 100">${t.build()}</svg>`;
+  div.addEventListener("click", () => loadTurtle(i));
+  picker.appendChild(div);
+});
+
+/* init */
+window.addEventListener("resize", resizeBoard);
+loadTurtle(0);
+resizeBoard();
+log("¡Hola! Escribe una orden 🐢 · Hi! Type a command", "ok");
+cmdInput.focus();
+</script>
+</body>
+</html>
