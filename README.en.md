@@ -41,49 +41,54 @@ start index.html         # Windows
 > *Print* — it shows every shape really drawn, in color, so kids see exactly what to type.
 > (A plain-text version also lives in [cheatsheet.md](cheatsheet.md).)
 
+> Commands are shown in UPPERCASE to match the keys on the keyboard; lowercase works too ·
+> Las órdenes se muestran en MAYÚSCULAS como las teclas; las minúsculas también funcionan.
+
 | What it does | English | Español |
 |---|---|---|
-| Move forward | `forward` / `fd` | `adelante` / `av` |
-| Move back | `back` / `bk` | `atras` / `re` |
-| Turn right | `right` / `rt` | `derecha` / `gd` |
-| Turn left | `left` / `lt` | `izquierda` / `gi` |
-| Pen up (stop drawing) | `penup` / `pu` | `subelapiz` / `sl` |
-| Pen down (start drawing) | `pendown` / `pd` | `bajalapiz` / `bl` |
-| Set pen color | `color red` | `color rojo` |
-| Set pen width | `width 5` | `grosor 5` |
-| Clear the board | `clear` / `cs` | `limpia` / `borra` |
-| Go to the center | `home` | `casa` |
-| Hide the turtle | `hideturtle` / `ht` | `oculta` / `ot` |
-| Show the turtle | `showturtle` / `st` | `muestra` / `mt` |
-| Repeat a block | `repeat 4 [ ... ]` | `repite 4 [ ... ]` |
+| Move forward | `FORWARD` / `FD` | `ADELANTE` / `AV` |
+| Move back | `BACK` / `BK` | `ATRAS` / `RE` |
+| Turn right | `RIGHT` / `RT` | `DERECHA` / `GD` |
+| Turn left | `LEFT` / `LT` | `IZQUIERDA` / `GI` |
+| Pen up (stop drawing) | `PENUP` / `PU` | `SUBELAPIZ` / `SL` |
+| Pen down (start drawing) | `PENDOWN` / `PD` | `BAJALAPIZ` / `BL` |
+| Set pen color | `COLOR RED` | `COLOR ROJO` |
+| Set pen width | `WIDTH 5` | `GROSOR 5` |
+| Clear the board | `CLEAR` / `CS` | `LIMPIA` / `BORRA` |
+| Go to the center | `HOME` | `CASA` |
+| Hide the turtle | `HIDETURTLE` / `HT` | `OCULTA` / `OT` |
+| Show the turtle | `SHOWTURTLE` / `ST` | `MUESTRA` / `MT` |
+| Repeat a block | `REPEAT 4 [ ... ]` | `REPITE 4 [ ... ]` |
 
 ### 🔷 Figures
 
 Draw a whole shape with a single command (they use the current pen color and width):
 
-| Figure | English | Español |
-|---|---|---|
-| Circle (radius) | `circle 60` | `circulo 60` |
-| Square (side) | `square 80` | `cuadrado 80` |
-| Triangle (side) | `triangle 90` | `triangulo 90` |
-| Rectangle (width height) | `rectangle 120 60` | `rectangulo 120 60` |
-| Polygon (sides side) | `polygon 6 60` | `poligono 6 60` |
-| Star (size) | `star 120` | `estrella 120` |
+Each figure has a short form · Cada figura tiene una forma corta: `CI CU TR RC PG ES`.
 
-**Colors:** red/rojo, blue/azul, green/verde, yellow/amarillo, orange/naranja,
-purple/morado, pink/rosa, black/negro, brown/marron, white/blanco, gray/gris,
-turquoise/turquesa, lime/lima — or any hex like `#ff0000`.
+| Figure | English | Español | Short · Corta |
+|---|---|---|---|
+| Circle (radius) | `CIRCLE 60` | `CIRCULO 60` | `CI 60` |
+| Square (side) | `SQUARE 80` | `CUADRADO 80` | `CU 80` |
+| Triangle (side) | `TRIANGLE 90` | `TRIANGULO 90` | `TR 90` |
+| Rectangle (width height) | `RECTANGLE 120 60` | `RECTANGULO 120 60` | `RC 120 60` |
+| Polygon (sides side) | `POLYGON 6 60` | `POLIGONO 6 60` | `PG 6 60` |
+| Star (size) | `STAR 120` | `ESTRELLA 120` | `ES 120` |
 
-Commands are case- and accent-insensitive, so `atrás`, `ATRAS`, and `atras` all work.
+**Colors:** RED/ROJO, BLUE/AZUL, GREEN/VERDE, YELLOW/AMARILLO, ORANGE/NARANJA,
+PURPLE/MORADO, PINK/ROSA, BLACK/NEGRO, BROWN/MARRON, WHITE/BLANCO, GRAY/GRIS,
+TURQUOISE/TURQUESA, LIME/LIMA — or any hex like `#FF0000`.
+
+Commands are case- and accent-insensitive, so `ATRÁS`, `ATRAS`, and `atras` all work.
 
 ### Try this 👇
 
 ```
-color red
-circle 70                                 # a red circle
-star 120                                  # a star
-polygon 6 60                              # a hexagon
-repeat 6 [ circle 50 right 60 ]           # a flower of circles
+COLOR RED
+CIRCLE 70                                 # a red circle
+STAR 120                                  # a star
+POLYGON 6 60                              # a hexagon
+REPEAT 6 [ CIRCLE 50 RIGHT 60 ]           # a flower of circles
 ```
 
 ## 🛠️ How it's built

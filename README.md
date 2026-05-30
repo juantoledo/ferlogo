@@ -44,49 +44,54 @@ start index.html         # Windows
 > de solo texto en [cheatsheet.md](cheatsheet.md).) · Open `cheatsheet.html` and print it; it
 > shows every shape really drawn, in color.
 
+> Las órdenes se escriben en MAYÚSCULAS (como las teclas del teclado). También funcionan en
+> minúsculas · Commands are shown in UPPERCASE to match the keyboard keys; lowercase works too.
+
 | Qué hace | Español | English |
 |---|---|---|
-| Avanzar | `adelante` / `av` | `forward` / `fd` |
-| Retroceder | `atras` / `re` | `back` / `bk` |
-| Girar a la derecha | `derecha` / `gd` | `right` / `rt` |
-| Girar a la izquierda | `izquierda` / `gi` | `left` / `lt` |
-| Subir el lápiz (no dibuja) | `subelapiz` / `sl` | `penup` / `pu` |
-| Bajar el lápiz (dibuja) | `bajalapiz` / `bl` | `pendown` / `pd` |
-| Cambiar el color | `color rojo` | `color red` |
-| Cambiar el grosor | `grosor 5` | `width 5` |
-| Limpiar la pizarra | `limpia` / `borra` | `clear` / `cs` |
-| Ir al centro | `casa` | `home` |
-| Ocultar la tortuga | `oculta` / `ot` | `hideturtle` / `ht` |
-| Mostrar la tortuga | `muestra` / `mt` | `showturtle` / `st` |
-| Repetir un bloque | `repite 4 [ ... ]` | `repeat 4 [ ... ]` |
+| Avanzar | `ADELANTE` / `AV` | `FORWARD` / `FD` |
+| Retroceder | `ATRAS` / `RE` | `BACK` / `BK` |
+| Girar a la derecha | `DERECHA` / `GD` | `RIGHT` / `RT` |
+| Girar a la izquierda | `IZQUIERDA` / `GI` | `LEFT` / `LT` |
+| Subir el lápiz (no dibuja) | `SUBELAPIZ` / `SL` | `PENUP` / `PU` |
+| Bajar el lápiz (dibuja) | `BAJALAPIZ` / `BL` | `PENDOWN` / `PD` |
+| Cambiar el color | `COLOR ROJO` | `COLOR RED` |
+| Cambiar el grosor | `GROSOR 5` | `WIDTH 5` |
+| Limpiar la pizarra | `LIMPIA` / `BORRA` | `CLEAR` / `CS` |
+| Ir al centro | `CASA` | `HOME` |
+| Ocultar la tortuga | `OCULTA` / `OT` | `HIDETURTLE` / `HT` |
+| Mostrar la tortuga | `MUESTRA` / `MT` | `SHOWTURTLE` / `ST` |
+| Repetir un bloque | `REPITE 4 [ ... ]` | `REPEAT 4 [ ... ]` |
 
 ### 🔷 Figuras · Figures
 
 Dibuja figuras completas con una sola orden (usan el color y grosor actuales):
 
-| Figura | Español | English |
-|---|---|---|
-| Círculo (radio) | `circulo 60` | `circle 60` |
-| Cuadrado (lado) | `cuadrado 80` | `square 80` |
-| Triángulo (lado) | `triangulo 90` | `triangle 90` |
-| Rectángulo (ancho alto) | `rectangulo 120 60` | `rectangle 120 60` |
-| Polígono (lados lado) | `poligono 6 60` | `polygon 6 60` |
-| Estrella (tamaño) | `estrella 120` | `star 120` |
+Cada figura tiene una forma corta · Each figure has a short form: `CI CU TR RC PG ES`.
 
-**Colores:** rojo/red, azul/blue, verde/green, amarillo/yellow, naranja/orange,
-morado/purple, rosa/pink, negro/black, marron/brown, blanco/white, gris/gray,
-turquesa/turquoise, lima/lime — o cualquier hex como `#ff0000`.
+| Figura | Español | English | Corta · Short |
+|---|---|---|---|
+| Círculo (radio) | `CIRCULO 60` | `CIRCLE 60` | `CI 60` |
+| Cuadrado (lado) | `CUADRADO 80` | `SQUARE 80` | `CU 80` |
+| Triángulo (lado) | `TRIANGULO 90` | `TRIANGLE 90` | `TR 90` |
+| Rectángulo (ancho alto) | `RECTANGULO 120 60` | `RECTANGLE 120 60` | `RC 120 60` |
+| Polígono (lados lado) | `POLIGONO 6 60` | `POLYGON 6 60` | `PG 6 60` |
+| Estrella (tamaño) | `ESTRELLA 120` | `STAR 120` | `ES 120` |
 
-No importan las mayúsculas ni los acentos: `atrás`, `ATRAS` y `atras` funcionan igual.
+**Colores:** ROJO/RED, AZUL/BLUE, VERDE/GREEN, AMARILLO/YELLOW, NARANJA/ORANGE,
+MORADO/PURPLE, ROSA/PINK, NEGRO/BLACK, MARRON/BROWN, BLANCO/WHITE, GRIS/GRAY,
+TURQUESA/TURQUOISE, LIMA/LIME — o cualquier hex como `#FF0000`.
+
+No importan las mayúsculas ni los acentos: `ATRÁS`, `ATRAS` y `atras` funcionan igual.
 
 ### Prueba esto 👇
 
 ```
-color rojo
-circulo 70                                # un círculo rojo
-estrella 120                              # una estrella
-poligono 6 60                             # un hexágono
-repite 6 [ circulo 50 derecha 60 ]        # una flor de círculos
+COLOR ROJO
+CIRCULO 70                                # un círculo rojo
+ESTRELLA 120                              # una estrella
+POLIGONO 6 60                             # un hexágono
+REPITE 6 [ CIRCULO 50 DERECHA 60 ]        # una flor de círculos
 ```
 
 ## 🛠️ Cómo está hecho
